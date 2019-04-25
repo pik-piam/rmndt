@@ -5,5 +5,4 @@ export(getGDP_dt)
 export(magpie2dt)
 export(toISO_dt)
 export(toRegions_dt)
-
 import(data.table)

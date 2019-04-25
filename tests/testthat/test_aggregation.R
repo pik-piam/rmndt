@@ -6,7 +6,7 @@ test_that("Aggregation and dis-aggregation without weights on data with multiple
     nrand <- sample(1:nrow(REMIND_RegionMap), 1)
     reg <- REMIND_RegionMap$region[nrand]
     cty <- REMIND_RegionMap$iso[nrand]
-    
+
     expect_equal(REMIND_FinalEnergy[region == reg, value], FEiso[iso == cty, value])
 
     ## re-aggregate and sum
@@ -32,7 +32,7 @@ test_that("Disaggregation with GDP weights on data with multiple dimensions", {
 
     ## summing should reproduce regional data
     FEsum <- toRegions_dt(FEiso, REMIND_RegionMap, datacols=c("se", "fe", "te"))
-    
+
     ## the sum has to be equal to the number or countries in the region
     expect_equal(FEsum[region == reg, value], REMIND_FinalEnergy[region == reg, value])
 })
@@ -52,5 +52,5 @@ test_that("Aggregation with GDP weights on data with multiple dimensions", {
     expect_equal(nrow(FEavg), nrow(REMIND_FinalEnergy))
     ## any NAs?
     expect_false(any(is.na(FEavg$value)))
-    
+
 })

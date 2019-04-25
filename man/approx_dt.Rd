@@ -2,33 +2,31 @@
 % Please edit documentation in R/approx.R
 \name{approx_dt}
 \alias{approx_dt}
-\title{Approximate missing values in a data.table.
-Similar, but not quite, like standard `approx`.}
+\title{Approximate missing values in a data.table.}
 \usage{
 approx_dt(dt, xdata, xcol = "year", ycol = "value",
   idxcols = "region", keepna = F, extrapolate = F)
 }
 \arguments{
-\item{dt, }{a data.table.}
+\item{dt}{a data.table.}
 
-\item{xdata, }{the range to interpolate to.}
+\item{xdata}{the range to interpolate to. This is the range the result will have along the dimension `xcol`.}
 
-\item{xcol, }{name of the column for interpolation, default is "year".}
+\item{xcol}{name of the column for interpolation, default is "year".}
 
-\item{ycol, }{name of the column that contains the value to be interpolated, default is "value".}
+\item{ycol}{name of the column that contains the value to be interpolated, default is "value".}
 
-\item{idxcols, }{columns that identify a row (besides xcol), i.e., the remaining index dimensions. Defaults to "region".}
+\item{idxcols}{columns that identify a row (besides xcol), i.e., the remaining index dimensions. Defaults to "region".}
 
-\item{keepna, }{keep NA values for rows that can not be interpolated (since they are outside of [min(xcol), max(xcol)]), default is FALSE.}
+\item{keepna}{keep NA values for rows that can not be interpolated (since they are outside of [min(xcol), max(xcol)]), default is FALSE.}
 
-\item{extrapolate, }{use the closest values to fill `ycol` outside of the interpolation domain, default is FALSE. This will also work if there is only one value along `ycol`, i.e., no interpolation is taking place.}
+\item{extrapolate}{use the closest values to fill `ycol` outside of the interpolation domain, default is FALSE. This will also work if there is only one value along `ycol`, i.e., no interpolation is taking place.}
 }
 \description{
-Approximate missing values in a data.table.
 Similar, but not quite, like standard `approx`.
 }
 \examples{
-dt <- as.data.table(ChickenWeight)
+dt <- as.data.table(ChickWeight)
 ## delete all values but 1
 dt[Chick == 1 & Time > 0, weight := NA]
 ## delete all values but 2

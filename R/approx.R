@@ -1,21 +1,23 @@
 #' Approximate missing values in a data.table.
+#'
 #' Similar, but not quite, like standard `approx`.
 #'
-#' @param dt, a data.table.
-#' @param xdata, the range to interpolate to. This is the range the result will have along the dimension `xcol`.
-#' @param xcol, name of the column for interpolation, default is "year".
-#' @param ycol, name of the column that contains the value to be interpolated, default is "value".
-#' @param idxcols, columns that identify a row (besides xcol), i.e., the remaining index dimensions. Defaults to "region".
-#' @param keepna, keep NA values for rows that can not be interpolated (since they are outside of [min(xcol), max(xcol)]), default is FALSE.
-#' @param extrapolate, use the closest values to fill `ycol` outside of the interpolation domain, default is FALSE. This will also work if there is only one value along `ycol`, i.e., no interpolation is taking place.
+#' @param dt a data.table.
+#' @param xdata the range to interpolate to. This is the range the result will have along the dimension `xcol`.
+#' @param xcol name of the column for interpolation, default is "year".
+#' @param ycol name of the column that contains the value to be interpolated, default is "value".
+#' @param idxcols columns that identify a row (besides xcol), i.e., the remaining index dimensions. Defaults to "region".
+#' @param keepna keep NA values for rows that can not be interpolated (since they are outside of [min(xcol), max(xcol)]), default is FALSE.
+#' @param extrapolate use the closest values to fill `ycol` outside of the interpolation domain, default is FALSE. This will also work if there is only one value along `ycol`, i.e., no interpolation is taking place.
+#' @import data.table
 #' @export
 #' @examples
-#' dt <- as.data.table(ChickenWeight)
+#' dt <- as.data.table(ChickWeight)
 #' ## delete all values but 1
 #' dt[Chick == 1 & Time > 0, weight := NA]
 #' ## delete all values but 2
 #' dt[Chick == 2 & Time > 2, weight := NA]
-#' 
+#'
 #' approx_dt(dt, 0:21, "Time", "weight", c("Chick", "Diet"), extrapolate = T)
 
 approx_dt <- function(dt, xdata,
@@ -24,6 +26,11 @@ approx_dt <- function(dt, xdata,
                       idxcols="region",
                       keepna=F,
                       extrapolate=F){
+
+    ## assert that there is some overlap between given xdata and the values in xcol
+    if(!any(between(dt[[xcol]], min(xdata), max(xdata)))){
+        stop("Given xdata and range in the xcol column of the table are not overlapping.")
+    }
 
     ## create a datatable based on the index columns and the new xrange
     vectors <- lapply(idxcols, function(item){
@@ -40,7 +47,7 @@ approx_dt <- function(dt, xdata,
     ## we delete combinations that are all NAs
     result = result[result[, .I[!all(is.na(get(ycol)))], by=idxcols]$V1]
 
-    
+
     if(extrapolate){
         result[, (ycol) := if(sum(!is.na(.SD[[ycol]])) > 1){
                                ## if there are at least two non-NA values, we interpolate

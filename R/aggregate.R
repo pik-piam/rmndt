@@ -13,6 +13,7 @@
 #' @param usecache, if "gdp" is chosen as strategy, store the weight in a cachefile to speed up future executions.
 #' @param gdpfile, if "gdp" is chosen as strategy and if caching is required, specify the filename here, default is "GDPcache.rds"
 #' @keywords iso3
+#' @import data.table
 #' @export
 
 toISO_dt <- function(data, mapping,
@@ -75,6 +76,7 @@ toISO_dt <- function(data, mapping,
 #' @param scenario, the scenario for the GDP projections, default is `gdp_SSP2`.
 #' @param usecache, if "gdp" is chosen as strategy, store the weight in a cachefile to speed up future executions.
 #' @param gdpfile, if "gdp" is chosen as strategy and if caching is required, specify the filename here, default is "GDPcache.rds"
+#' @import data.table
 #' @export
 
 toRegions_dt <- function(data, mapping,

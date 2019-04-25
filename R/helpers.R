@@ -8,6 +8,7 @@
 #' @param usecache, store the result in a RDS file in the working directory, default is FALSE.
 #' @param gdpfile, if caching is required, specify the filename here, default is "GDPcache.rds"
 #' @keywords gdp
+#' @import data.table
 #' @export
 #' @examples
 #' gdp <- getGDP_dt()
@@ -45,6 +46,7 @@ getGDP_dt <- function(scenario="gdp_SSP2",
 #'            If no value is given, the name provided in the magpie object is used.
 #' @param regioncol, name of the column containing REMIND regions, default is "region".
 #' @param yearcol, name of the column containing the year, default is "year".
+#' @import data.table
 #' @export
 #' @examples
 #' dt <- magpie2dt(myMagpieObject)
