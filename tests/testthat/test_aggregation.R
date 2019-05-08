@@ -1,6 +1,6 @@
 test_that("Aggregation and dis-aggregation without weights on data with multiple dimensions", {
     ## to iso countries, without weights (value reproduced)
-    FEiso <- toISO_dt(REMIND_FinalEnergy, REMIND_RegionMap, datacols=c("se", "fe", "te"))
+    FEiso <- disaggregate_dt(REMIND_FinalEnergy, REMIND_RegionMap, datacols=c("se", "fe", "te"))
 
     ## check for one line
     nrand <- sample(1:nrow(REMIND_RegionMap), 1)
@@ -10,7 +10,7 @@ test_that("Aggregation and dis-aggregation without weights on data with multiple
     expect_equal(REMIND_FinalEnergy[region == reg, value], FEiso[iso == cty, value])
 
     ## re-aggregate and sum
-    FEsum <- toRegions_dt(FEiso, REMIND_RegionMap, datacols=c("se", "fe", "te"))
+    FEsum <- aggregate_dt(FEiso, REMIND_RegionMap, datacols=c("se", "fe", "te"))
 
     ## n countries in region
     fac <- nrow(REMIND_RegionMap[region == reg])
@@ -21,9 +21,10 @@ test_that("Aggregation and dis-aggregation without weights on data with multiple
 
 test_that("Disaggregation with GDP weights on data with multiple dimensions", {
     ## to iso countries, distribute by GDP
-    FEiso <- toISO_dt(REMIND_FinalEnergy, REMIND_RegionMap,
-                      datacols=c("se", "fe", "te"),
-                      strategy="gdp")
+
+    FEiso <- disaggregate_dt(REMIND_FinalEnergy, REMIND_RegionMap,
+                             datacols=c("se", "fe", "te"),
+                             weights=REMIND_GDP)
 
     ## check for one line
     nrand <- sample(1:nrow(REMIND_RegionMap), 1)
@@ -31,7 +32,7 @@ test_that("Disaggregation with GDP weights on data with multiple dimensions", {
     cty <- REMIND_RegionMap$iso[nrand]
 
     ## summing should reproduce regional data
-    FEsum <- toRegions_dt(FEiso, REMIND_RegionMap, datacols=c("se", "fe", "te"))
+    FEsum <- aggregate_dt(FEiso, REMIND_RegionMap, datacols=c("se", "fe", "te"))
 
     ## the sum has to be equal to the number or countries in the region
     expect_equal(FEsum[region == reg, value], REMIND_FinalEnergy[region == reg, value])
@@ -39,14 +40,15 @@ test_that("Disaggregation with GDP weights on data with multiple dimensions", {
 
 test_that("Aggregation with GDP weights on data with multiple dimensions", {
     ## to iso countries, distribute by GDP
-    FEiso <- toISO_dt(REMIND_FinalEnergy, REMIND_RegionMap,
+
+    FEiso <- disaggregate_dt(REMIND_FinalEnergy, REMIND_RegionMap,
                       datacols=c("se", "fe", "te"),
-                      strategy="gdp")
+                      weights=REMIND_GDP)
 
     ## weighted average
-    FEavg <- toRegions_dt(FEiso, REMIND_RegionMap,
+    FEavg <- aggregate_dt(FEiso, REMIND_RegionMap,
                       datacols=c("se", "fe", "te"),
-                      strategy="gdp")
+                      weights=REMIND_GDP)
 
     ## dont know how to do a good check, lets compare size
     expect_equal(nrow(FEavg), nrow(REMIND_FinalEnergy))

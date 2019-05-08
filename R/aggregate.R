@@ -1,138 +1,136 @@
-#' Disaggregate value defined regionwise in a data.table object using a mapping.
-#' If the strategy is the default (`constant`), the value for the region is used on the (ISO3) countries.
-#' If the strategy is `gdp`, the GDP projections for the countries are used as weights to distribute the value for the region.
+#' Internal function to apply the weights and perform some checks.
 #'
-#' @param data, a magpie object.
-#' @param mapping, a mapping between the regions in the data and ISO3 countrycodes. *All* regions in `data` have to be part of the mapping.
-#' @param regioncol, name of the column containing regions. A region is a set of countries. Default is "region".
-#' @param yearcol, name of the column containing the year, default is "year".
-#' @param datacols, index dimensions that are not regional or temporal dimensions.
-#' @param valuecol, name of the column with the actual value to disaggregate, default is `value`.
-#' @param strategy, if "gdp" is chosen, GDP projections for the countries are loaded and used as a weight to distribute the regional value.
-#' @param scenario, the scenario for the GDP projections, default is `gdp_SSP2`.
-#' @param usecache, if "gdp" is chosen as strategy, store the weight in a cachefile to speed up future executions.
-#' @param gdpfile, if "gdp" is chosen as strategy and if caching is required, specify the filename here, default is "GDPcache.rds"
-#' @keywords iso3
+#' @param data a data.table.
+#' @param mapping a mapping between the aggregated categories and their parts. *All* aggregated categories in `data` have to be part of the mapping.
+#' @param weights table with weights for disaggregation, the name of the column with the aggregated categories has to be `manycol`. If columns (other than the column with the aggregated category) of the `weights` coincide with columns of the data, the respective columns are considered when joining.
+#' @param fewcol name of the column containing aggregated categories. Default is "region".
+#' @param manycol name of the column containing dis-aggregated categories. Default is "iso".
+#' @param valuecol name of the column with the actual value to disaggregate, default is `value`.
+#' @param datacols index columns that label categories which have to be treated seperately when dis-aggregating with a weight.
+#' @param weightcol column with the weights for the dis-aggregation, default is `weight`.
 #' @import data.table
-#' @export
 
-toISO_dt <- function(data, mapping,
-                      regioncol="region",
-                      yearcol="year",
-                      isocol="iso",
-                      datacols="data",
-                      valuecol="value",
-                      strategy="constant",
-                      scenario="gdp_SSP2",
-                      usecache=F,
-                      gdpfile="GDPcache.rds"){
-    ## Note that isocol in the data has to match the column name in the mapping
-    mapping <- mapping[, c(isocol, regioncol), with=F]
-
-    ## require the mapping to be a superset of the regions in data
-    diff <- setdiff(unique(data[[regioncol]]), mapping[[regioncol]])
-    if(length(diff)){
-        stop("Mapping is incomplete. Missing regions: ", paste(diff, collapse=", "))
-    }
-    ## disaggregation function
-    data <- mapping[data, on=c(regioncol), allow.cartesian=T]
-
-    if(strategy == "gdp"){
-        gdp <- rmndt::getGDP_dt(scenario, yearcol, isocol, "weight",
-                                usecache=usecache, gdpfile=gdpfile)
-        ## GDP data ISO country resolution has to be a superset of the mapping
-        diff <- setdiff(unique(mapping[[isocol]]), unique(gdp[[isocol]]))
+apply_weights <- function(data, mapping, weights, fewcol, manycol, valuecol, datacols, weightcol){
+        
+        diff <- setdiff(unique(mapping[[manycol]]), unique(weights[[manycol]]))
         if(length(diff)){
-            warning("Warning: GDP data is incomplete. ",
-                    "ISO countries that are in the mapping, but not in the GDP data: ",
+            warning("The weights are incomplete. ",
+                    "Some dis-aggregated categories are found in the mapping, but not in the weights: ",
                     paste(diff, collapse=", "))
         }
 
-        ## are data years subset of GDP data years
-        stopifnot(all(data[[yearcol]] %in% gdp[[yearcol]]))
+        ## we are only interested in the matching cols and the weight col
+        inboth <- intersect(colnames(data), colnames(weights))
+        weights <- weights[, c(inboth, weightcol), with=F]
+
+        ## are there other dimensions to consider when applying the weights?
+        othercols <- setdiff(inboth, manycol)
 
         ## leftjoin data
-        data <- gdp[data, on=c(isocol, yearcol)]
+        data <- weights[data, on=c(manycol, othercols)]
+
+        ## if there are NAs in the weights, the weights were incomplete along the additional dimension
+        if(any(is.na(data[[weightcol]]))){
+            warning("NAs are found when joining the weights. ",
+                    "The weights are incomplete along the following dimension(s):",
+                    paste(othercols, collapse=", "))
+        }
 
         ## apply weights
-        data[, (valuecol) := get(valuecol)*weight/sum(weight), by=c(yearcol, regioncol, datacols)]
-        data[, c("weight", "variable") := NULL]
+        data[, (valuecol) := get(valuecol)*get(weightcol)/sum(get(weightcol)), by=c(fewcol, othercols, datacols)]
+        data[, (weightcol) := NULL]
+    
+}
+
+
+#' Disaggregate data in a data.table object using a mapping.
+#' If no weights are given, the value for the aggregated categories is used on the disaggregated ones.
+#' If a weight is given, the values from the aggregated categories are distributed according to the weights.
+#'
+#' @param data a data.table.
+#' @param mapping a mapping between the aggregated categories and their parts. *All* aggregated categories in `data` have to be part of the mapping.
+#' @param fewcol name of the column containing aggregated categories. Default is "region".
+#' @param manycol name of the column containing dis-aggregated categories. Default is "iso".
+#' @param valuecol name of the column with the actual value to disaggregate, default is `value`.
+#' @param datacols index columns that label categories which have to be treated seperately when dis-aggregating with a weight.
+#' @param weights table with weights for disaggregation, the name of the column with the aggregated categories has to be `manycol`. If columns (other than the column with the aggregated category) of the `weights` coincide with columns of the data, the respective columns are considered when joining.
+#' @param weightcol column with the weights for the dis-aggregation, default is `weight`.
+#' @import data.table
+#' @export
+
+disaggregate_dt <- function(data, mapping,
+                     fewcol="region",
+                     manycol="iso",
+                     valuecol="value",
+                     datacols="data",
+                     weights=NULL,
+                     weightcol="weight"){
+    ## Note that isocol in the data has to match the column name in the mapping
+    mapping <- mapping[, c(manycol, fewcol), with=F]
+
+    ## require the mapping to be a superset of the regions in data
+    diff <- setdiff(unique(data[[fewcol]]), mapping[[fewcol]])
+    if(length(diff)){
+        stop("Mapping is incomplete. Missing aggregated categories: ", paste(diff, collapse=", "))
     }
-    data[, (regioncol) := NULL]
+    ## disaggregation function
+    data <- mapping[data, on=c(fewcol), allow.cartesian=T]
+
+    if(!is.null(weights)){
+        data <- apply_weights(data, mapping, weights, fewcol, manycol, valuecol, datacols, weightcol)
+    }
+    data[, (fewcol) := NULL]
     return(data)
 }
 
-#' Aggregate values defined countrywise in a data.table object to regions using a mapping.
-#' If the strategy is the default (`sum`), the value for the region is the sum of the (ISO3) country values.
-#' If the strategy is `gdp`, GDP projections for the countries are used to calculate the regional value as a weighted average of the country values.
+#' Aggregate values in a data.table object using a mapping.
+#' If no weight is given, the value for the aggregated categories is the sum of the parts.
+#' Otherwise, the weight is used to calculate a weighted average accross the parts.
 #'
 #' @param data, a magpie object.
-#' @param mapping, a mapping between the regions in the data and ISO3 countrycodes. *All* regions in `data` have to be part of the mapping.
-#' @param regioncol, name of the column containing regions. A region is a set of countries. Default is "region".
-#' @param yearcol, name of the column containing the year, default is "year".
-#' @param datacols, index dimensions that are not regional or temporal dimensions.
-#' @param valuecol, name of the column with the actual value to disaggregate, default is `value`.
-#' @param strategy, if "gdp" is chosen, GDP projections for the countries are loaded and used as a weight to distribute the regional value.
-#' @param scenario, the scenario for the GDP projections, default is `gdp_SSP2`.
-#' @param usecache, if "gdp" is chosen as strategy, store the weight in a cachefile to speed up future executions.
-#' @param gdpfile, if "gdp" is chosen as strategy and if caching is required, specify the filename here, default is "GDPcache.rds"
+#' @param mapping, a mapping between the aggregated categories in the data and ISO3 countrycodes. *All* regions in `data` have to be part of the mapping.
+#' @param fewcol, name of the column containing aggregated categories. Default is "region".
+#' @param manycol, name of the column containing dis-aggregated categories. Default is "iso".
+#' @param valuecol name of the column with the value to aggregate, default is `value`.
+#' @param datacols index columns that label categories which have to be treated seperately when aggregating with a weight.
+#' @param weights table with weights for a (weighted average) aggregation, the name of the column with the aggregated categories has to be `manycol`. If columns (other than the column with the aggregated category) of the `weights` coincide with columns of the data, the respective columns are considered when joining.
+#' @param weightcol column with the weights for aggregation, default is `weight`.
 #' @import data.table
 #' @export
 
-toRegions_dt <- function(data, mapping,
-                          regioncol="region",
-                          yearcol="year",
-                          isocol="iso",
-                          datacols="data",
-                          valuecol="value",
-                          strategy="sum",
-                          scenario="gdp_SSP2",
-                          usecache=F,
-                          gdpfile="GDPcache.rds"){
+aggregate_dt <- function(data, mapping,
+                         fewcol="region",
+                         yearcol="year",
+                         manycol="iso",
+                         datacols="data",
+                         valuecol="value",
+                         weights=NULL,
+                         weightcol="weight"){
 
     ## aggregation function, sums by default
-    ## alternatively, do a weighted average by GDP
-    mapping <- mapping[, c(isocol, regioncol), with=F]
+    ## alternatively, do a weighted average
+    mapping <- mapping[, c(manycol, fewcol), with=F]
 
     ## left join: only regions in the mapping are mapped
-    data <- mapping[data, on=c(isocol)]
+    data <- mapping[data, on=c(manycol)]
 
     ## require the mapping to be a superset of the countries in data
-    diff <- setdiff(unique(data[[isocol]]), mapping[[isocol]])
+    diff <- setdiff(unique(data[[manycol]]), mapping[[manycol]])
     if(length(diff)){
         warning("Mapping is incomplete. Data for the following ISO countries is omitted: ", paste(diff, collapse=", "))
-        data <- data[!is.na(get(regioncol))]
+        data <- data[!is.na(get(fewcol))]
     }
 
-    if(strategy == "gdp"){
-        gdp <- rmndt::getGDP_dt(scenario, yearcol, isocol, "weight",
-                                usecache=usecache, gdpfile=gdpfile)
-
-        diff <- setdiff(unique(mapping[[isocol]]), unique(gdp[[isocol]]))
-        if(length(diff)){
-            warning("Warning: GDP data is incomplete. ",
-                    "ISO countries that are in the mapping, but not in the GDP data: ",
-                    paste(diff, collapse=", "))
-        }
-        ## are data years subset of GDP data years
-        stopifnot(all(data[[yearcol]] %in% gdp[[yearcol]]))
-
-        ## leftjoin data
-        data <- gdp[data, on=c(isocol, yearcol)]
-
-        ## apply weights
-        data[, (valuecol) := get(valuecol)*weight/sum(weight), by=c(yearcol, regioncol, datacols)]
-
-        data[, c("weight", "variable") := NULL]
-
+    if(!is.null(weights)){
+        data <- apply_weights(data, mapping, weights, fewcol, manycol, valuecol, datacols, weightcol)
     }
     ## sum
-    data[, (valuecol) := sum(get(valuecol), na.rm=T), by=c(yearcol, regioncol, datacols)]
+    data[, (valuecol) := sum(get(valuecol), na.rm=T), by=c(yearcol, fewcol, datacols)]
 
-    # drop isocol
-    data[, (isocol) := NULL]
-    # drop duplicates
-    data <- unique(data[, c(regioncol, yearcol, datacols, valuecol), with=FALSE])
+    # drop manycol
+    data[, (manycol) := NULL]
+    # drop duplicate rows
+    data <- unique(data)
     return(data)
 }
 
