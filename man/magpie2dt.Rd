@@ -5,22 +5,28 @@
 \title{Load a magpie object as data.table object with given colnames.
 Replaces years by numeric values, removing the leading y.}
 \usage{
-magpie2dt(data, regioncol = NULL, yearcol = NULL, datacols = NULL)
+magpie2dt(data, regioncol = NULL, yearcol = NULL, datacols = NULL,
+  valcol = "value")
 }
 \arguments{
-\item{data, }{a magpie object.}
+\item{data}{a magpie object.}
 
-\item{regioncol, }{name of the column containing REMIND regions, default is "region".}
+\item{regioncol}{name of the column containing REMIND regions, default is "region".}
 
-\item{yearcol, }{name of the column containing the year, default is "year".}
+\item{yearcol}{name of the column containing the year, default is "year".}
 
-\item{datacols, }{the names of the data dimension(s) of the magpie object.
+\item{datacols}{the names of the data dimension(s) of the magpie object.
 If no value is given, the name provided in the magpie object is used.}
+
+\item{valcol}{column to host actual value, default is "value"}
 }
 \description{
 Load a magpie object as data.table object with given colnames.
 Replaces years by numeric values, removing the leading y.
 }
 \examples{
-dt <- magpie2dt(myMagpieObject)
+\dontrun{
+require(magpie)
+dt <- magpie2dt(population_magpie)
+}
 }

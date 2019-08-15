@@ -18,14 +18,14 @@
 #' ## delete all values but 2
 #' dt[Chick == 2 & Time > 2, weight := NA]
 #'
-#' approx_dt(dt, 0:21, "Time", "weight", c("Chick", "Diet"), extrapolate = T)
+#' approx_dt(dt, 0:21, "Time", "weight", c("Chick", "Diet"), extrapolate = TRUE)
 
 approx_dt <- function(dt, xdata,
                       xcol="year",
                       ycol="value",
                       idxcols="region",
-                      keepna=F,
-                      extrapolate=F){
+                      keepna=FALSE,
+                      extrapolate=FALSE){
 
     ## assert that there is some overlap between given xdata and the values in xcol
     if(!any(between(dt[[xcol]], min(xdata), max(xdata)))){

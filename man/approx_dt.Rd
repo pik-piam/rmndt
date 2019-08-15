@@ -5,7 +5,7 @@
 \title{Approximate missing values in a data.table.}
 \usage{
 approx_dt(dt, xdata, xcol = "year", ycol = "value",
-  idxcols = "region", keepna = F, extrapolate = F)
+  idxcols = "region", keepna = FALSE, extrapolate = FALSE)
 }
 \arguments{
 \item{dt}{a data.table.}
@@ -32,5 +32,5 @@ dt[Chick == 1 & Time > 0, weight := NA]
 ## delete all values but 2
 dt[Chick == 2 & Time > 2, weight := NA]
 
-approx_dt(dt, 0:21, "Time", "weight", c("Chick", "Diet"), extrapolate = T)
+approx_dt(dt, 0:21, "Time", "weight", c("Chick", "Diet"), extrapolate = TRUE)
 }
