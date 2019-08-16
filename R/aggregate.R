@@ -91,6 +91,7 @@ disaggregate_dt <- function(data, mapping,
 #' @param mapping, a mapping between the aggregated categories in the data and ISO3 countrycodes. *All* regions in `data` have to be part of the mapping.
 #' @param fewcol, name of the column containing aggregated categories. Default is "region".
 #' @param manycol, name of the column containing dis-aggregated categories. Default is "iso".
+#' @param yearcol, name of the column containing time step info. Default is "year".
 #' @param valuecol name of the column with the value to aggregate, default is `value`.
 #' @param datacols index columns that label categories which have to be treated seperately when aggregating with a weight.
 #' @param weights table with weights for a (weighted average) aggregation, the name of the column with the aggregated categories has to be `manycol`. If columns (other than the column with the aggregated category) of the `weights` coincide with columns of the data, the respective columns are considered when joining.

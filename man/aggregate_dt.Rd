@@ -17,6 +17,8 @@ aggregate_dt(data, mapping, fewcol = "region", yearcol = "year",
 
 \item{fewcol, }{name of the column containing aggregated categories. Default is "region".}
 
+\item{yearcol, }{name of the column containing time step info. Default is "year".}
+
 \item{manycol, }{name of the column containing dis-aggregated categories. Default is "iso".}
 
 \item{datacols}{index columns that label categories which have to be treated seperately when aggregating with a weight.}

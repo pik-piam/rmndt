@@ -9,7 +9,9 @@
 #' @param idxcols columns that identify a row (besides xcol), i.e., the remaining index dimensions. Defaults to "region".
 #' @param keepna keep NA values for rows that can not be interpolated (since they are outside of [min(xcol), max(xcol)]), default is FALSE.
 #' @param extrapolate use the closest values to fill `ycol` outside of the interpolation domain, default is FALSE. This will also work if there is only one value along `ycol`, i.e., no interpolation is taking place.
+#' 
 #' @import data.table
+#' @importFrom stats approx
 #' @export
 #' @examples
 #' dt <- as.data.table(ChickWeight)

@@ -9,7 +9,7 @@
 #' @param valcol column to host actual value, default is "value"
 #'
 #' @import data.table
-#' @importFrom magclass getSets
+#' @importFrom magclass getSets getSets<-
 #' @export
 #' @examples
 #' \dontrun{
