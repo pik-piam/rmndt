@@ -7,9 +7,9 @@
 approx_dt(
   dt,
   xdata,
-  xcol = "year",
-  ycol = "value",
-  idxcols = "region",
+  xcol,
+  ycol,
+  idxcols = NULL,
   keepna = FALSE,
   extrapolate = FALSE
 )
@@ -19,18 +19,25 @@ approx_dt(
 
 \item{xdata}{the range to interpolate to. This is the range the result will have along the dimension `xcol`.}
 
-\item{xcol}{name of the column for interpolation, default is "year".}
+\item{xcol}{name of the column for interpolation.}
 
-\item{ycol}{name of the column that contains the value to be interpolated, default is "value".}
+\item{ycol}{name of the column that contains the value to be interpolated.}
 
-\item{idxcols}{columns that identify a row (besides xcol), i.e., the remaining index dimensions. Defaults to "region".}
+\item{idxcols}{columns that identify a row (besides xcol), i.e., the remaining index dimensions.}
 
 \item{keepna}{keep NA values for rows that can not be interpolated (since they are outside of [min(xcol), max(xcol)]), default is FALSE.}
 
 \item{extrapolate}{use the closest values to fill `ycol` outside of the interpolation domain, default is FALSE. This will also work if there is only one value along `ycol`, i.e., no interpolation is taking place.}
 }
+\value{
+a data.table with the range given by `xdata` along `xcol`. Columns not given in `idxcols` will be kept but NAs will appear on extrapolated and interpolated rows.
+}
 \description{
-Similar, but not quite, like standard `approx`.
+Similar to, but not quite like, `stats::approx`.
+Does only support constant extrapolation and linear interpolation.
+The resulting `data.table` only contains the range provided by `xdata` along `xcol`.
+Without extrapolation, `xcol` in the resulting `data.table` may not
+cover the range given by `xdata`.
 }
 \examples{
 dt <- as.data.table(ChickWeight)
@@ -39,5 +46,14 @@ dt[Chick == 1 & Time > 0, weight := NA]
 ## delete all values but 2
 dt[Chick == 2 & Time > 2, weight := NA]
 
-approx_dt(dt, 0:21, "Time", "weight", c("Chick", "Diet"), extrapolate = TRUE)
+## extrapolation from 1 value
+approx_dt(dt, 0:21, "Time", "weight", idxcols=c("Chick", "Diet"), extrapolate = TRUE)[Chick == 1]
+## extrapolation and interpolation
+approx_dt(dt, 0:21, "Time", "weight", idxcols=c("Chick", "Diet"), extrapolate = TRUE)[Chick == 2]
+## column not in idxcols
+approx_dt(dt, 0:21, "Time", "weight", idxcols="Chick", extrapolate = TRUE)[Chick == 2]
+
+dt <- as.data.table(ChickWeight)
+## interpolation only
+approx_dt(dt, 0:21, "Time", "weight", idxcols=c("Chick", "Diet"))[Chick == 2]
 }
