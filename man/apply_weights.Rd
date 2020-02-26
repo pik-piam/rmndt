@@ -4,8 +4,16 @@
 \alias{apply_weights}
 \title{Internal function to apply the weights and perform some checks.}
 \usage{
-apply_weights(data, mapping, weights, fewcol, manycol, valuecol, datacols,
-  weightcol)
+apply_weights(
+  data,
+  mapping,
+  weights,
+  fewcol,
+  manycol,
+  valuecol,
+  datacols,
+  weightcol
+)
 }
 \arguments{
 \item{data}{a data.table.}

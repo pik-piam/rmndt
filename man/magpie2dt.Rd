@@ -5,8 +5,13 @@
 \title{Load a magpie object as data.table object with given colnames.
 Replaces years by numeric values, removing the leading y.}
 \usage{
-magpie2dt(data, regioncol = NULL, yearcol = NULL, datacols = NULL,
-  valcol = "value")
+magpie2dt(
+  data,
+  regioncol = NULL,
+  yearcol = NULL,
+  datacols = NULL,
+  valcol = "value"
+)
 }
 \arguments{
 \item{data}{a magpie object.}

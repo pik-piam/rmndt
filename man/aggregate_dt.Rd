@@ -6,9 +6,17 @@
 If no weight is given, the value for the aggregated categories is the sum of the parts.
 Otherwise, the weight is used to calculate a weighted average accross the parts.}
 \usage{
-aggregate_dt(data, mapping, fewcol = "region", yearcol = "year",
-  manycol = "iso", datacols = "data", valuecol = "value",
-  weights = NULL, weightcol = "weight")
+aggregate_dt(
+  data,
+  mapping,
+  fewcol = "region",
+  yearcol = "year",
+  manycol = "iso",
+  datacols = "data",
+  valuecol = "value",
+  weights = NULL,
+  weightcol = "weight"
+)
 }
 \arguments{
 \item{data, }{a magpie object.}

@@ -6,9 +6,16 @@
 If no weights are given, the value for the aggregated categories is used on the disaggregated ones.
 If a weight is given, the values from the aggregated categories are distributed according to the weights.}
 \usage{
-disaggregate_dt(data, mapping, fewcol = "region", manycol = "iso",
-  valuecol = "value", datacols = "data", weights = NULL,
-  weightcol = "weight")
+disaggregate_dt(
+  data,
+  mapping,
+  fewcol = "region",
+  manycol = "iso",
+  valuecol = "value",
+  datacols = "data",
+  weights = NULL,
+  weightcol = "weight"
+)
 }
 \arguments{
 \item{data}{a data.table.}

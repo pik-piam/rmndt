@@ -36,6 +36,9 @@ magpie2dt <- function(data, regioncol=NULL, yearcol=NULL, datacols=NULL, valcol=
         cols <- datacols
     }
 
+    ## mask column names in data.table expressions for code check
+    myolddatacol <- myoldyearcol <- NULL
+
     names(data)[3] <- "myolddatacol"
 
     data[, (cols) := tstrsplit(myolddatacol, ".", fixed = TRUE)]

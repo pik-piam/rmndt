@@ -4,8 +4,15 @@
 \alias{approx_dt}
 \title{Approximate missing values in a data.table.}
 \usage{
-approx_dt(dt, xdata, xcol = "year", ycol = "value",
-  idxcols = "region", keepna = FALSE, extrapolate = FALSE)
+approx_dt(
+  dt,
+  xdata,
+  xcol = "year",
+  ycol = "value",
+  idxcols = "region",
+  keepna = FALSE,
+  extrapolate = FALSE
+)
 }
 \arguments{
 \item{dt}{a data.table.}

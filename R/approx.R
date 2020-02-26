@@ -60,7 +60,7 @@ approx_dt <- function(dt, xdata,
                            },
                by=idxcols]
     }else{
-        if(max(data[[xcol]]) < max(xdata) || min(data[[xcol]]) > min(xdata)){
+        if(max(dt[[xcol]]) < max(xdata) || min(dt[[xcol]]) > min(xdata)){
             stop("Error: interpolation range out of bounds.")
         }
         result[, (ycol) := approx(.SD[[xcol]], .SD[[ycol]], xout = .SD[[xcol]], rule = 1)$y,
