@@ -8,9 +8,9 @@
 #'
 #' @param dt a data.table.
 #' @param xdata the range to interpolate to. This is the range the result will have along the dimension `xcol`.
-#' @param xcol name of the column for interpolation, default is "year".
-#' @param ycol name of the column that contains the value to be interpolated, default is "value".
-#' @param idxcols columns that identify a row (besides xcol), i.e., the remaining index dimensions. Defaults to "region".
+#' @param xcol name of the column for interpolation.
+#' @param ycol name of the column that contains the value to be interpolated.
+#' @param idxcols columns that identify a row (besides xcol), i.e., the remaining index dimensions.
 #' @param keepna keep NA values for rows that can not be interpolated (since they are outside of [min(xcol), max(xcol)]), default is FALSE.
 #' @param extrapolate use the closest values to fill `ycol` outside of the interpolation domain, default is FALSE. This will also work if there is only one value along `ycol`, i.e., no interpolation is taking place.
 #' @return a data.table with the range given by `xdata` along `xcol`. Columns not given in `idxcols` will be kept but NAs will appear on extrapolated and interpolated rows.
@@ -36,10 +36,8 @@
 #' ## interpolation only
 #' approx_dt(dt, 0:21, "Time", "weight", idxcols=c("Chick", "Diet"))[Chick == 2]
 
-approx_dt <- function(dt, xdata,
-                      xcol="year",
-                      ycol="value",
-                      idxcols="region",
+approx_dt <- function(dt, xdata, xcol, ycol,
+                      idxcols=NULL,
                       keepna=FALSE,
                       extrapolate=FALSE){
 
