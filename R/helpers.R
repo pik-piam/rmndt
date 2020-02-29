@@ -49,3 +49,47 @@ magpie2dt <- function(data, regioncol=NULL, yearcol=NULL, datacols=NULL, valcol=
     data[, myoldyearcol := NULL]
     return(data[, c(regioncol, yearcol, cols, valcol), with=F])
 }
+
+
+#' Execute *vertical* calculations along a given column.
+#'
+#' This assumes a *long* format with a single value column,
+#' dcasts the data.table to wide format, executes the calulation,
+#' melts back to long format and returns the resulting data.table
+#' with the additional column.
+#'
+#' Note that the data.table should have at least three columns, i.e.,
+#' the variable, the value and one id column.
+#'
+#' @param dt data.table, long format
+#' @param varcol name of the column with the variable
+#' @param valcol name of the column with the value
+#' @param exp_str the expression to be calculated, a string
+#' @param res_var name of the variable to which the result is to be stored
+#' @param ... other arguments are passed on to the data.table call where `exp` is evaluated.
+#'     Most likely you want to pass the `by=` parameter for group-by calls, see examples.
+#'
+#' @import data.table
+#' @export
+#' @examples
+#' mt_dt <- as.data.table(mtcars, keep.rownames = TRUE)
+#' ## to long
+#' mt1 <- melt(mt_dt, id.vars=c("rn", "cyl"))
+#'
+#' varcalc_dt(mt1, "variable", "value", "wt/hp", "spec. hp")
+#' varcalc_dt(mt1, "variable", "value", "sum(wt)", "wsum", by="cyl")
+
+varcalc_dt <- function(dt, varcol, valcol, exp_str, res_var, ...) {
+  ## cols without valcol and varcol will be idcols
+  idcols <- colnames(dt)[! colnames(dt) %in% c(varcol, valcol)]
+  if(length(idcols) == 0){
+    stop("Table has to have a column besides variable and value columns.")
+  }
+  dt_wide <- data.table::dcast(dt, paste0(paste(idcols, collapse="+"), "~", varcol),
+                               value.var = valcol)
+  exp <- parse(text=exp_str)
+  dt_wide[, (res_var) := eval(exp), ...]
+  return(melt(dt_wide, value.name=valcol,
+              id.vars = idcols,
+              variable.name = varcol))
+}
