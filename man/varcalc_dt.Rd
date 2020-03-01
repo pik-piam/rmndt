@@ -4,7 +4,7 @@
 \alias{varcalc_dt}
 \title{Execute *vertical* calculations along a given column.}
 \usage{
-varcalc_dt(dt, varcol, valcol, exp_str, res_var, ...)
+varcalc_dt(dt, varcol, valcol, expr, ...)
 }
 \arguments{
 \item{dt}{data.table, long format}
@@ -13,18 +13,16 @@ varcalc_dt(dt, varcol, valcol, exp_str, res_var, ...)
 
 \item{valcol}{name of the column with the value}
 
-\item{exp_str}{the expression to be calculated, a string}
+\item{expr}{vector of expressions to be handed to j in data.table, as strings, e.g., "a := b/c"}
 
-\item{res_var}{name of the variable to which the result is to be stored}
-
-\item{...}{other arguments are passed on to the data.table call where `exp` is evaluated.
+\item{...}{other arguments are passed on to the data.table call where `expr` is evaluated.
 Most likely you want to pass the `by=` parameter for group-by calls, see examples.}
 }
 \description{
 This assumes a *long* format with a single value column,
-dcasts the data.table to wide format, executes the calulation,
+dcasts the data.table to wide format, executes the calulation(s),
 melts back to long format and returns the resulting data.table
-with the additional column.
+with the additional column(s).
 }
 \details{
 Note that the data.table should have at least three columns, i.e.,
@@ -35,6 +33,5 @@ mt_dt <- as.data.table(mtcars, keep.rownames = TRUE)
 ## to long
 mt1 <- melt(mt_dt, id.vars=c("rn", "cyl"))
 
-varcalc_dt(mt1, "variable", "value", "wt/hp", "spec. hp")
-varcalc_dt(mt1, "variable", "value", "sum(wt)", "wsum", by="cyl")
+varcalc_dt(mt1, "variable", "value", c("`spec. hp` := wt/hp", "wsum := sum(wt)"), by="cyl")
 }
