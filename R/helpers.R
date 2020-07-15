@@ -1,3 +1,55 @@
+#' Read a REMIND output (MIF) file.
+#'
+#' Note that these files are semi-colon separated CSVs with a trailing semi-colon
+#' at the end of each entry.
+#'
+#' @param mif A REMIND output file (.MIF)
+#'
+#' @import data.table
+#' @export
+#' @examples
+#' \dontrun{
+#' dt <- readMIF("REMIND_generic_default.mif")
+#' }
+
+readMIF <- function(mif) {
+  dt <- fread(mif, header=T)
+  dt[, V25 := NULL]
+  return(dt)
+}
+
+#' Write a REMIND output (MIF) file.
+#'
+#' Note that these files are semi-colon separated CSVs with a trailing semi-colon
+#' at the end of each entry. Required columns are "Model", "Scenario",
+#' "Region", "Variable", "Unit" and an arbitrary number of year colums
+#' (should be convertable to numeric).
+#'
+#' @param dt a data.table in the correct format.
+#' @param destination path to the resulting MIF file
+#' @param append append to an existing MIF file?
+#'
+#' @import data.table
+#' @export
+#' @examples
+#' \dontrun{
+#' dt <- readMIF("REMIND_generic_default.mif")
+#' }
+
+writeMIF <- function(dt, destination, append=FALSE) {
+  ## Check for columns
+  if(!all(colnames(dt)[1:5] == c("Model", "Scenario", "Region", "Variable", "Unit"))){
+    stop(paste("Supplied data.table does not support the correct column names.",
+               "There should be `Model`, `Scenario`, `Region`, `Variable`, `Unit`"))
+  }
+  ## try to convert remaining cols to numerics
+  chk <- sapply(colnames(dt)[6:length(colnames(dt))], as.numeric)
+
+  EOL <- if (.Platform$OS.type=="windows") ";\r\n" else ";\n"
+  fwrite(dt, destination, append=append, sep=";", eol=EOL)
+}
+
+
 #' Load a magpie object as data.table object with given colnames.
 #' Replaces years by numeric values, removing the leading y.
 #'
