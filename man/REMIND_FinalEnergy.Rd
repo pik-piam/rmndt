@@ -4,7 +4,8 @@
 \name{REMIND_FinalEnergy}
 \alias{REMIND_FinalEnergy}
 \title{A random REMIND FE trajectory.}
-\format{A data frame with 2011 rows and 6 columns:
+\format{
+A data frame with 2011 rows and 6 columns:
 \describe{
   \item{year}{REMIND time step}
   \item{region}{REMIND-12 region}
@@ -12,7 +13,8 @@
   \item{fe}{Final energy identifier}
   \item{te}{Conversion technology identifier}
   \item{value}{The data column, EJ/yr}
-}}
+}
+}
 \usage{
 REMIND_FinalEnergy
 }

@@ -4,12 +4,14 @@
 \name{REMIND_RegionMap}
 \alias{REMIND_RegionMap}
 \title{The mapping between REMIND-12 regions and ISO countries}
-\format{A data frame with 249 rows and 3 columns:
+\format{
+A data frame with 249 rows and 3 columns:
 \describe{
   \item{name}{Name of the country}
   \item{iso}{ISO3 country code}
   \item{region}{REMIND region name}
-}}
+}
+}
 \usage{
 REMIND_RegionMap
 }

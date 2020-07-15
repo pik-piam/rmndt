@@ -1,2 +1,3 @@
 ^rmndt\.Rproj$
 ^\.Rproj\.user$
+^.*\.zenodo.json$

@@ -13,6 +13,8 @@
 #' }
 
 readMIF <- function(mif) {
+  V25 <- NULL
+
   dt <- fread(mif, header=T)
   dt[, V25 := NULL]
   return(dt)
