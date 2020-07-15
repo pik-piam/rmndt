@@ -13,10 +13,10 @@
 #' }
 
 readMIF <- function(mif) {
-  V25 <- NULL
-
   dt <- fread(mif, header=T)
-  dt[, V25 := NULL]
+  lastcol <- colnames(dt)[length(colnames(dt))]
+
+  dt[, (lastcol) := NULL]
   return(dt)
 }
 
