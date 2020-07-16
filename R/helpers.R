@@ -16,7 +16,9 @@ readMIF <- function(mif) {
   dt <- fread(mif, header=T)
   lastcol <- colnames(dt)[length(colnames(dt))]
 
-  dt[, (lastcol) := NULL]
+  if(all(is.na(dt[[lastcol]]))){
+    dt[, (lastcol) := NULL]
+  }
   return(dt)
 }
 
@@ -35,7 +37,7 @@ readMIF <- function(mif) {
 #' @export
 #' @examples
 #' \dontrun{
-#' dt <- readMIF("REMIND_generic_default.mif")
+#' writeMIF(dt, "REMIND_generic_default.mif")
 #' }
 
 writeMIF <- function(dt, destination, append=FALSE) {
