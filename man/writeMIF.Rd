@@ -21,6 +21,6 @@ at the end of each entry. Required columns are "Model", "Scenario",
 }
 \examples{
 \dontrun{
-dt <- readMIF("REMIND_generic_default.mif")
+writeMIF(dt, "REMIND_generic_default.mif")
 }
 }
