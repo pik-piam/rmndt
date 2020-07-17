@@ -21,6 +21,9 @@ readMIF <- function(mif) {
   for(col in cols){
     ncol <- suppressWarnings(as.numeric(col))
     if(is.na(ncol)){
+      warning(sprintf(
+        "File %s contains extra columns in the header, those are ignored.",
+        mif))
       dt[, (col) := NULL]
     }
   }
