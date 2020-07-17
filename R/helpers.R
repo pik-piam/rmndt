@@ -1,7 +1,9 @@
 #' Read a REMIND output (MIF) file.
 #'
-#' Note that these files are semi-colon separated CSVs with a trailing semi-colon
-#' at the end of each entry.
+#' REMIND style output files are semi-colon separated CSVs with a trailing semi-colon
+#' at the end of each row. The following structure is assumed:
+#' Columns "Model", "Scenario", "Region", "Variable", "Unit"
+#' and an arbitrary number of year colums (convertable to numeric).
 #'
 #' @param mif A REMIND output file (.MIF)
 #'
@@ -14,10 +16,13 @@
 
 readMIF <- function(mif) {
   dt <- fread(mif, header=T)
-  lastcol <- colnames(dt)[length(colnames(dt))]
 
-  if(all(is.na(dt[[lastcol]]))){
-    dt[, (lastcol) := NULL]
+  cols <- colnames(dt)[6:length(colnames(dt))]
+  for(col in cols){
+    ncol <- suppressWarnings(as.numeric(col))
+    if(is.na(ncol)){
+      dt[, (col) := NULL]
+    }
   }
   return(dt)
 }

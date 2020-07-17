@@ -10,8 +10,10 @@ readMIF(mif)
 \item{mif}{A REMIND output file (.MIF)}
 }
 \description{
-Note that these files are semi-colon separated CSVs with a trailing semi-colon
-at the end of each entry.
+REMIND style output files are semi-colon separated CSVs with a trailing semi-colon
+at the end of each row. The following structure is assumed:
+Columns "Model", "Scenario", "Region", "Variable", "Unit"
+and an arbitrary number of year colums (convertable to numeric).
 }
 \examples{
 \dontrun{
