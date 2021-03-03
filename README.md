@@ -1,8 +1,8 @@
 # Tools for data.table objects in the REMIND context
 
-R package **rmndt**, version **0.4.4**
+R package **rmndt**, version **0.5.0**
 
-  
+[![CRAN status](https://www.r-pkg.org/badges/version/rmndt)](https://cran.r-project.org/package=rmndt)    
 
 ## Purpose and Functionality
 
@@ -38,8 +38,8 @@ In case of questions / problems please contact Alois Dirnaichner <dirnaichner@pi
 
 To cite package **rmndt** in publications use:
 
-Dirnaichner A (2020). _rmndt: Tools for data.table objects in the
-REMIND context_. R package version 0.4.4.
+Dirnaichner A (2021). _rmndt: Tools for data.table objects in the
+REMIND context_. R package version 0.5.0.
 
 A BibTeX entry for LaTeX users is
 
@@ -47,8 +47,8 @@ A BibTeX entry for LaTeX users is
 @Manual{,
   title = {rmndt: Tools for data.table objects in the REMIND context},
   author = {Alois Dirnaichner},
-  year = {2020},
-  note = {R package version 0.4.4},
+  year = {2021},
+  note = {R package version 0.5.0},
 }
 ```
 

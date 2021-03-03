@@ -73,7 +73,6 @@ writeMIF <- function(dt, destination, append=FALSE) {
 #' @param valcol column to host actual value, default is "value"
 #'
 #' @import data.table
-#' @importFrom magclass getSets getSets<-
 #' @export
 #' @examples
 #' \dontrun{
@@ -83,14 +82,14 @@ writeMIF <- function(dt, destination, append=FALSE) {
 
 magpie2dt <- function(data, regioncol=NULL, yearcol=NULL, datacols=NULL, valcol="value") {
     if(is.null(regioncol)){
-        regioncol <- getSets(data)[1]
+        regioncol <- magclass::getSets(data)[1]
     }else{
-        getSets(data)[1] <- regioncol
+        magclass::getSets(data)[1] <- regioncol
     }
     if(is.null(yearcol)){
-        yearcol <- getSets(data)[2]
+        yearcol <- magclass::getSets(data)[2]
     }else{
-        getSets(data)[2] <- yearcol
+        magclass::getSets(data)[2] <- yearcol
     }
 
     data <- as.data.table(data)

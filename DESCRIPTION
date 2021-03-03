@@ -1,19 +1,16 @@
 Package: rmndt
 Title: Tools for data.table objects in the REMIND context
-Version: 0.4.4
+Version: 0.5.0
 Authors@R: person("Alois", "Dirnaichner", email = "dirnaichner@pik-potsdam.de", role = c("aut", "cre"))
 Description: Helper functions for REMIND-related tasks with data.table objects, e.g., interpolation and (dis-)aggregation.
 Depends:
     R (>= 3.1),
     data.table (>= 1.11.0)
-Imports:
-    madrat,
-    magclass
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1
 Suggests: 
-    testthat
-Date: 2020-07-17
-ValidationKey: 812240
+    testthat,
+    magclass
+Date: 2021-03-03

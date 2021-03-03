@@ -1,3 +1,4 @@
 ^rmndt\.Rproj$
 ^\.Rproj\.user$
 ^.*\.zenodo.json$
+^\.buildlibrary$
