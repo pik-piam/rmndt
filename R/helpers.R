@@ -34,6 +34,8 @@ readMIF <- function(mif) {
 #' "Region", "Variable", "Unit" and an arbitrary number of year colums
 #' (should be convertable to numeric).
 #'
+#' NAs are written to the file as "N/A".
+#'
 #' @param dt a data.table in the correct format.
 #' @param destination path to the resulting MIF file
 #' @param append append to an existing MIF file?
@@ -56,7 +58,7 @@ writeMIF <- function(dt, destination, append=FALSE, ...) {
   chk <- sapply(colnames(dt)[6:length(colnames(dt))], as.numeric)
 
   EOL <- if (.Platform$OS.type=="windows") ";\r\n" else ";\n"
-  fwrite(dt, destination, append=append, sep=";", eol=EOL, ...)
+  fwrite(dt, destination, append=append, sep=";", eol=EOL, na="N/A", ...)
 }
 
 

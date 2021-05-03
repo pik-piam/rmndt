@@ -21,6 +21,9 @@ at the end of each entry. Required columns are "Model", "Scenario",
 "Region", "Variable", "Unit" and an arbitrary number of year colums
 (should be convertable to numeric).
 }
+\details{
+NAs are written to the file as "N/A".
+}
 \examples{
 \dontrun{
 writeMIF(dt, "REMIND_generic_default.mif")
