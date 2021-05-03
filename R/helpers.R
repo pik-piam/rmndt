@@ -34,6 +34,8 @@ readMIF <- function(mif) {
 #' "Region", "Variable", "Unit" and an arbitrary number of year colums
 #' (should be convertable to numeric).
 #'
+#' Parameters not mentionend explicitly are passed on to data.table::fwrite
+#'
 #' @param dt a data.table in the correct format.
 #' @param destination path to the resulting MIF file
 #' @param append append to an existing MIF file?
@@ -45,7 +47,7 @@ readMIF <- function(mif) {
 #' writeMIF(dt, "REMIND_generic_default.mif")
 #' }
 
-writeMIF <- function(dt, destination, append=FALSE) {
+writeMIF <- function(dt, destination, append=FALSE, ...) {
   ## Check for columns
   if(!all(colnames(dt)[1:5] == c("Model", "Scenario", "Region", "Variable", "Unit"))){
     stop(paste("Supplied data.table does not support the correct column names.",
@@ -55,7 +57,7 @@ writeMIF <- function(dt, destination, append=FALSE) {
   chk <- sapply(colnames(dt)[6:length(colnames(dt))], as.numeric)
 
   EOL <- if (.Platform$OS.type=="windows") ";\r\n" else ";\n"
-  fwrite(dt, destination, append=append, sep=";", eol=EOL)
+  fwrite(dt, destination, append=append, sep=";", eol=EOL, ...)
 }
 
 
