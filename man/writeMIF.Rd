@@ -4,7 +4,7 @@
 \alias{writeMIF}
 \title{Write a REMIND output (MIF) file.}
 \usage{
-writeMIF(dt, destination, append = FALSE)
+writeMIF(dt, destination, append = FALSE, ...)
 }
 \arguments{
 \item{dt}{a data.table in the correct format.}
@@ -12,6 +12,8 @@ writeMIF(dt, destination, append = FALSE)
 \item{destination}{path to the resulting MIF file}
 
 \item{append}{append to an existing MIF file?}
+
+\item{...}{other parameters are passed on to data.table::fwrite}
 }
 \description{
 Note that these files are semi-colon separated CSVs with a trailing semi-colon

@@ -34,11 +34,10 @@ readMIF <- function(mif) {
 #' "Region", "Variable", "Unit" and an arbitrary number of year colums
 #' (should be convertable to numeric).
 #'
-#' Parameters not mentionend explicitly are passed on to data.table::fwrite
-#'
 #' @param dt a data.table in the correct format.
 #' @param destination path to the resulting MIF file
 #' @param append append to an existing MIF file?
+#' @param ... other parameters are passed on to data.table::fwrite
 #'
 #' @import data.table
 #' @export
