@@ -58,7 +58,7 @@ writeMIF <- function(dt, destination, append=FALSE, ...) {
   chk <- sapply(colnames(dt)[6:length(colnames(dt))], as.numeric)
 
   EOL <- if (.Platform$OS.type=="windows") ";\r\n" else ";\n"
-  fwrite(dt, destination, append=append, sep=";", eol=EOL, na="N/A", ...)
+  fwrite(dt, destination, append=append, sep=";", quote=FALSE, eol=EOL, na="N/A", ...)
 }
 
 
