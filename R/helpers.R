@@ -15,7 +15,7 @@
 #' }
 
 readMIF <- function(mif) {
-  dt <- fread(mif, header=T)
+  dt <- fread(mif, header=T, na.strings="N/A")
 
   cols <- colnames(dt)[6:length(colnames(dt))]
   for(col in cols){
@@ -42,6 +42,8 @@ readMIF <- function(mif) {
 #' @param ... other parameters are passed on to data.table::fwrite
 #'
 #' @import data.table
+#' @importFrom quitte write.mif
+#' @importFrom magclass as.magpie
 #' @export
 #' @examples
 #' \dontrun{
@@ -57,8 +59,8 @@ writeMIF <- function(dt, destination, append=FALSE, ...) {
   ## try to convert remaining cols to numerics
   chk <- sapply(colnames(dt)[6:length(colnames(dt))], as.numeric)
 
-  EOL <- if (.Platform$OS.type=="windows") ";\r\n" else ";\n"
-  fwrite(dt, destination, append=append, sep=";", quote=FALSE, eol=EOL, na="N/A", ...)
+  warning("writeMIF is deprecated: please use quitte::write.mif or magclass::write.report.")
+  write.report(as.magpie(as.quitte(dt)), destination, append = append, ...)
 }
 
 
