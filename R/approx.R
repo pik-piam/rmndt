@@ -37,9 +37,11 @@
 #' approx_dt(dt, 0:21, "Time", "weight", idxcols=c("Chick", "Diet"))[Chick == 2]
 
 approx_dt <- function(dt, xdata, xcol, ycol,
-                      idxcols,
+                      idxcols = NULL,
                       keepna = FALSE,
                       extrapolate = FALSE){
+
+dummycol <- ..idxcol <- target <- xrange <- NULL
 
     ## assert that there is some overlap between given xdata and the values in xcol
     if(!any(between(dt[[xcol]], min(xdata), max(xdata)))){
@@ -55,7 +57,7 @@ approx_dt <- function(dt, xdata, xcol, ycol,
 
     ## for the missing xdata we expand the full idx range
     result <- merge(dt, target, by = c(idxcols, xcol), all = T)
-    
+
     if(extrapolate){
         result[, (ycol) := if(sum(!is.na(.SD[[ycol]])) > 1){
                                ## if there are at least two non-NA values, we interpolate
