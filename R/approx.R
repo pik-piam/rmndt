@@ -40,7 +40,7 @@ approx_dt <- function(dt, xdata, xcol, ycol,
                       idxcols,
                       keepna = FALSE,
                       extrapolate = FALSE){
-browser()
+
     ## assert that there is some overlap between given xdata and the values in xcol
     if(!any(between(dt[[xcol]], min(xdata), max(xdata)))){
         stop("Given xdata and range in the xcol column of the table are not overlapping.")
@@ -51,7 +51,7 @@ browser()
     xrange <- data.table(xcol = xdata)
     names(xrange) <- xcol
     xrange[, dummycol := "new xdata"]
-    target <- merge(target, xrange, by = "dummycol", allow.cartesian = TRUE)
+    target <- merge(target, xrange, by = "dummycol", allow.cartesian = TRUE)[, dummycol := NULL]
 
     ## for the missing xdata we expand the full idx range
     result <- merge(dt, target, by = c(idxcols, xcol), all = T)
