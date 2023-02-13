@@ -37,31 +37,25 @@
 #' approx_dt(dt, 0:21, "Time", "weight", idxcols=c("Chick", "Diet"))[Chick == 2]
 
 approx_dt <- function(dt, xdata, xcol, ycol,
-                      idxcols=NULL,
-                      keepna=FALSE,
-                      extrapolate=FALSE){
-
+                      idxcols,
+                      keepna = FALSE,
+                      extrapolate = FALSE){
+browser()
     ## assert that there is some overlap between given xdata and the values in xcol
     if(!any(between(dt[[xcol]], min(xdata), max(xdata)))){
         stop("Given xdata and range in the xcol column of the table are not overlapping.")
     }
 
-    ## create a datatable based on the index columns and the new xrange
-    vectors <- lapply(idxcols, function(item){
-        dt[[item]]
-    })
-    names(vectors) <- idxcols
+    ## create a datatable based on the index columns and the new xdata
+    target <- unique(dt[, ..idxcols])[, dummycol := "new xdata"]
+    xrange <- data.table(xcol = xdata)
+    names(xrange) <- xcol
+    xrange[, dummycol := "new xdata"]
+    target <- merge(target, xrange, by = "dummycol", allow.cartesian = TRUE)
 
-    ## missing_xvals = setdiff(xdata, dt[[xcol]])
-    vectors[[xcol]] <- xdata
-
-    ## for the missing years we expand the full idx range
-    result <- merge(dt, do.call(CJ, c(vectors, unique=T)), by=c(idxcols, xcol), all=T)
-
-    ## we delete combinations that are all NAs
-    result = result[result[, .I[!all(is.na(get(ycol)))], by=idxcols]$V1]
-
-
+    ## for the missing xdata we expand the full idx range
+    result <- merge(dt, target, by = c(idxcols, xcol), all = T)
+    
     if(extrapolate){
         result[, (ycol) := if(sum(!is.na(.SD[[ycol]])) > 1){
                                ## if there are at least two non-NA values, we interpolate
@@ -70,7 +64,7 @@ approx_dt <- function(dt, xdata, xcol, ycol,
                                ## if there is only one value, we use it on the whole column
                                sum(.SD[[ycol]], na.rm = T)
                            },
-               by=idxcols]
+               by = idxcols]
     }else{
         if(max(dt[[xcol]]) < max(xdata) || min(dt[[xcol]]) > min(xdata)){
             stop("Error: interpolation range out of bounds.")
