@@ -41,13 +41,12 @@ approx_dt <- function(dt, xdata, xcol, ycol,
                       keepna = FALSE,
                       extrapolate = FALSE){
 
-dummycol <- ..idxcol <- target <- xrange <- NULL
+dummycol <- target <- xrange <- NULL
 
     ## assert that there is some overlap between given xdata and the values in xcol
     if(!any(between(dt[[xcol]], min(xdata), max(xdata)))){
         stop("Given xdata and range in the xcol column of the table are not overlapping.")
     }
-
     ## create a datatable based on the index columns and the new xdata
     target <- unique(dt[, ..idxcols])[, dummycol := "new xdata"]
     xrange <- data.table(xcol = xdata)
