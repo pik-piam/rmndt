@@ -2,7 +2,7 @@
 
 R package **rmndt**, version **0.5.5**
 
-[![CRAN status](https://www.r-pkg.org/badges/version/rmndt)](https://cran.r-project.org/package=rmndt)  [![R build status](https://github.com/pik-piam/rmndt/workflows/check/badge.svg)](https://github.com/pik-piam/rmndt/actions) [![codecov](https://codecov.io/gh/pik-piam/rmndt/branch/master/graph/badge.svg)](https://app.codecov.io/gh/pik-piam/rmndt) [![r-universe](https://pik-piam.r-universe.dev/badges/rmndt)](https://pik-piam.r-universe.dev/builds)
+[![CRAN status](https://www.r-pkg.org/badges/version/rmndt)](https://cran.r-project.org/package=rmndt)  [![R build status](https://github.com/johannah-pik/rmndt/workflows/check/badge.svg)](https://github.com/johannah-pik/rmndt/actions) [![codecov](https://codecov.io/gh/johannah-pik/rmndt/branch/master/graph/badge.svg)](https://app.codecov.io/gh/johannah-pik/rmndt) [![r-universe](https://pik-piam.r-universe.dev/badges/rmndt)](https://pik-piam.r-universe.dev/builds)
 
 ## Purpose and Functionality
 

@@ -8,3 +8,5 @@
 ^.lintr$
 ^tests/.lintr$
 ^.*CITATION.cff$
+^codecov\.yml$
+^\.github$

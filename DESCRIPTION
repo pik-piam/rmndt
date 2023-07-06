@@ -12,5 +12,6 @@ LazyData: true
 RoxygenNote: 7.2.3
 Suggests: 
     testthat,
-    magclass
+    magclass,
+    covr
 Date: 2023-07-06
