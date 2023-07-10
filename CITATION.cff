@@ -1,0 +1,14 @@
+cff-version: 1.2.0
+message: If you use this software, please cite it using the metadata from this file.
+type: software
+title: 'rmndt: Tools for data.table objects in the REMIND context'
+version: 0.5.5
+date-released: '2023-07-06'
+abstract: Helper functions for REMIND-related tasks with data.table objects, e.g.,
+  interpolation and (dis-)aggregation.
+authors:
+- family-names: Dirnaichner
+  given-names: Alois
+  email: dirnaichner@pik-potsdam.de
+license: GPL-3.0
+
