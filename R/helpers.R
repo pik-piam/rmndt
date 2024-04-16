@@ -80,7 +80,7 @@ writeMIF <- function(dt, destination, append=FALSE, ...) {
 #' dt <- magpie2dt(population_magpie)
 #' }
 
-magpie2dt <- function(data, regioncol=NULL, yearcol=NULL, datacols=NULL, valcol="value") {
+magpie2dt <- function(data, regioncol = NULL, yearcol = NULL, datacols = NULL, valcol = "value") {
     if(is.null(regioncol)){
         regioncol <- magclass::getSets(data)[1]
     }else{
@@ -110,7 +110,7 @@ magpie2dt <- function(data, regioncol=NULL, yearcol=NULL, datacols=NULL, valcol=
     setnames(data, c(yearcol, "value"), c("myoldyearcol", valcol))
     data[, (yearcol) := as.numeric(gsub("y", "", myoldyearcol))]
     data[, myoldyearcol := NULL]
-    return(data[, c(regioncol, yearcol, cols, valcol), with=F])
+    return(data[, c(regioncol, cols, yearcol, valcol), with = F])
 }
 
 
