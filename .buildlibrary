@@ -1,4 +1,4 @@
-ValidationKey: '1074920'
+ValidationKey: '1189860'
 AutocreateReadme: yes
 AcceptedWarnings:
 - 'Warning: package ''.*'' was built under R version'
@@ -7,3 +7,4 @@ AcceptedNotes:
 - approx_dt: no visible binding for global variable '..idxcols'
   Undefined global functions or variables: ..idxcols
 allowLinterWarnings: yes
+enforceVersionUpdate: no
