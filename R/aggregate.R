@@ -11,7 +11,7 @@
 #' @import data.table
 
 apply_weights <- function(data, mapping, weights, fewcol, manycol, valuecol, datacols, weightcol){
-        
+
         diff <- setdiff(unique(mapping[[manycol]]), unique(weights[[manycol]]))
         if(length(diff)){
             warning("The weights are incomplete. ",
@@ -39,7 +39,7 @@ apply_weights <- function(data, mapping, weights, fewcol, manycol, valuecol, dat
         ## apply weights
         data[, (valuecol) := get(valuecol)*get(weightcol)/sum(get(weightcol)), by=c(fewcol, othercols, datacols)]
         data[, (weightcol) := NULL]
-    
+
 }
 
 
@@ -108,12 +108,13 @@ aggregate_dt <- function(data, mapping,
                          weights=NULL,
                          weightcol="weight"){
 
+
     ## aggregation function, sums by default
     ## alternatively, do a weighted average
-    mapping <- mapping[, c(manycol, fewcol), with=F]
+    mapping <- unique(mapping[, c(manycol, fewcol), with=F])
 
     ## left join: only regions in the mapping are mapped
-    data <- mapping[data, on=c(manycol)]
+    data <- merge(data, mapping, by = manycol, all = TRUE, allow.cartesian = TRUE)
 
     ## require the mapping to be a superset of the countries in data
     diff <- setdiff(unique(data[[manycol]]), mapping[[manycol]])
