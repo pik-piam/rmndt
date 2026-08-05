@@ -7,7 +7,7 @@ based on gamstransfer package}
 \usage{
 writeDfToGDXparameter(
   ddata,
-  gdxPath,
+  gdxFileName,
   paramName,
   domainCols = NULL,
   valueCol = "value",
@@ -17,7 +17,7 @@ writeDfToGDXparameter(
 \arguments{
 \item{ddata}{data.frame or data.table}
 
-\item{gdxPath}{Output file path (e.g., "pXX_someName.gdx")}
+\item{gdxFileName}{Output file name incl. path (e.g., "pXX_someName.gdx")}
 
 \item{paramName}{Name of the GAMS parameter in GDX}
 
@@ -29,7 +29,7 @@ If NULL, defaults to all columns except `valueCol`.}
 \item{description}{Optional description for the parameter (default: "")}
 }
 \value{
-`NULL`, invisibly. Called for the side effect of writing `gdxPath`.
+`NULL`, invisibly. Called for the side effect of writing `gdxFileName`.
 }
 \description{
 Export Data Frame / Data Table to GDX Parameter and save to file
