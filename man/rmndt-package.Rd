@@ -11,4 +11,10 @@ Helper functions for REMIND-related tasks with data.table objects, e.g., interpo
 \author{
 \strong{Maintainer}: Alois Dirnaichner \email{dirnaichner@pik-potsdam.de}
 
+Authors:
+\itemize{
+  \item Alois Dirnaichner \email{dirnaichner@pik-potsdam.de}
+  \item Alex K. Hagen \email{alex.hagen@pik-potsdam.de} (\href{https://orcid.org/0000-0003-4793-8664}{ORCID})
+}
+
 }

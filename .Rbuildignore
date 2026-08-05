@@ -10,3 +10,5 @@
 ^.*CITATION.cff$
 ^codecov\.yml$
 ^\.github$
+^\.claude$
+^_pkgdown\.yml$
