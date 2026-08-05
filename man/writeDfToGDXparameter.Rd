@@ -17,9 +17,9 @@ writeDfToGDXparameter(
 \arguments{
 \item{ddata}{data.frame or data.table}
 
-\item{gdxPath}{Output file path (e.g., "output.gdx")}
+\item{gdxPath}{Output file path (e.g., "pXX_someName.gdx")}
 
-\item{paramName}{Name of the GAMS parameter in GDX (default: "p35_fe2es")}
+\item{paramName}{Name of the GAMS parameter in GDX}
 
 \item{domainCols}{Optional vector of column names for domains.
 If NULL, defaults to all columns except `valueCol`.}

@@ -2,8 +2,8 @@
 #' based on gamstransfer package
 #'
 #' @param ddata data.frame or data.table
-#' @param gdxPath Output file path (e.g., "output.gdx")
-#' @param paramName Name of the GAMS parameter in GDX (default: "p35_fe2es")
+#' @param gdxPath Output file path (e.g., "pXX_someName.gdx")
+#' @param paramName Name of the GAMS parameter in GDX 
 #' @param domainCols Optional vector of column names for domains.
 #'                    If NULL, defaults to all columns except `valueCol`.
 #' @param valueCol Name of the numerical value column (default: "value")
