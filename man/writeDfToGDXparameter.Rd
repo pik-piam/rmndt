@@ -28,6 +28,9 @@ If NULL, defaults to all columns except `valueCol`.}
 
 \item{description}{Optional description for the parameter (default: "")}
 }
+\value{
+`NULL`, invisibly. Called for the side effect of writing `gdxPath`.
+}
 \description{
 Export Data Frame / Data Table to GDX Parameter and save to file
 based on gamstransfer package

@@ -2,20 +2,22 @@
 #' based on gamstransfer package
 #'
 #' @param ddata data.frame or data.table
-#' @param gdxPath Output file path (e.g., "pXX_someName.gdx")
-#' @param paramName Name of the GAMS parameter in GDX 
+#' @param gdxFileName Output file name incl. path (e.g., "pXX_someName.gdx")
+#' @param paramName Name of the GAMS parameter in GDX
 #' @param domainCols Optional vector of column names for domains.
 #'                    If NULL, defaults to all columns except `valueCol`.
 #' @param valueCol Name of the numerical value column (default: "value")
 #' @param description Optional description for the parameter (default: "")
+#' @return `NULL`, invisibly. Called for the side effect of writing `gdxFileName`.
 #' @author Alex K. Hagen
-#'
+#' @export
+
 writeDfToGDXparameter <- function(ddata,
-                         gdxPath,
-                         paramName,
-                         domainCols = NULL,
-                         valueCol = "value",
-                         description = "") {
+                                  gdxFileName,
+                                  paramName,
+                                  domainCols = NULL,
+                                  valueCol = "value",
+                                  description = "") {
 
 
   # Automatically infer domainCols if not specified
@@ -60,5 +62,5 @@ writeDfToGDXparameter <- function(ddata,
     description = description
   )
 
-  m$write(gdxPath)
+  m$write(gdxFileName)
 }
