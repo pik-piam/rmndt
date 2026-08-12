@@ -54,7 +54,7 @@ approx_dt <- function(dt, xdata, xcol, ycol,
     }
 
     ## create a datatable based on the index columns and the new xdata
-    target <- unique(dt[, ..idxcols])[, dummycol := "new xdata"]
+    target <- unique(dt[, idxcols, with = FALSE])[, dummycol := "new xdata"]
     xrange <- data.table(xcol = xdata)
     names(xrange) <- xcol
     xrange[, dummycol := "new xdata"]
