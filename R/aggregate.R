@@ -32,6 +32,17 @@ apply_weights <- function(data, mapping, weights, fewcol, manycol, valuecol, wei
             weights <- weights[, c(inboth, weightcol), with=F]
             data <- weights[data, on=c(manycol, othercols)]
         } else {
+            ## the original join coerces the join columns of the data to the types in the weights
+            ## (e.g., numeric years become integer), keep this behaviour
+            for(col in c(manycol, othercols)){
+                x <- weights[[col]]
+                i <- data[[col]]
+                if(is.integer(x) && is.double(i) && isTRUE(all(i == round(i), na.rm=TRUE))){
+                    set(data, j=col, value=as.integer(i))
+                } else if(is.double(x) && is.integer(i)){
+                    set(data, j=col, value=as.double(i))
+                }
+            }
             set(data, j=weightcol, value=weights[[weightcol]][idx])
             ## same column order as the original join weights[data]
             setcolorder(data, c(inboth, weightcol))

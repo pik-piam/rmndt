@@ -93,6 +93,19 @@ test_that("Time-invariant weights are applied separately for each year", {
     expect_equal(check$value.x, check$value.y)
 })
 
+test_that("Weighted disaggregation coerces join columns to the types in the weights", {
+    mapping <- data.table(region=c("R", "R"), iso=c("A", "B"))
+    weights <- data.table(iso=c("A", "B"), period=2020L, weight=c(1, 3))
+    data <- data.table(region="R", period=2020, value=10)
+    out <- disaggregate_dt(data, mapping, weights=weights)
+    expect_type(out$period, "integer")
+
+    weights[, period := as.double(period)]
+    data <- data.table(region="R", period=2020L, value=10)
+    out <- disaggregate_dt(data, mapping, weights=weights)
+    expect_type(out$period, "double")
+})
+
 test_that("Aggregation keeps additional index columns", {
     mapping <- data.table(region=c("R", "R"), iso=c("A", "B"))
     data <- data.table(iso=c("A", "B", "A", "B"), year=2020, extra=c("x", "x", "y", "y"), value=1:4)
